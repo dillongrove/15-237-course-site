@@ -1,0 +1,793 @@
+	<!DOCTYPE HTML>
+	<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link href="css/prettify.css" type="text/css" rel="stylesheet" />
+		<link href="css/desert.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/style.css" rel="stylesheet" />
+
+		<script type="text/javascript" src="js/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+		<div id="notes_header">
+			<span>15-237: Building Cross-Platform Mobile Web Apps</span>
+			<h1>jQuery</h1>
+
+		</div>
+
+		<section>
+			<h2>What is jQuery?</h2>
+			<section>
+				<p>jQuery is a popular javascript library that makes <strong>DOM manipulation</strong>, <strong>event handling</strong>, <strong>animation</strong>, and <strong>AJAX</strong> much easier.  The goal behind the library is to allow you to do more by writing less.</p>
+			</section>
+		</section>
+
+		<section>
+			<h2>Installing jQuery</h2>
+			<section>
+				<p>To install jQuery, go to <a href="http://jquery.com/">their website</a>, download the latest production version (1.8.1 at the time of this writing) and put it somewhere in your project directory, preferably in a folder called "js" at the root of your project.  Then, link it in your html file with:</p>
+				<pre class="prettyprint lang-html">
+&lt;script src=&quot;js/jquery.js&quot;&gt;&lt;/script&gt;</pre>
+			</section>
+		</section>
+
+		<section>
+			<h2>Fiddling with jQuery</h2>
+			<section>
+				<p>We can actually enable jQuery in jsfiddle by selecting it in the second dropdown box on the left, under "Choose Framework".  This is super useful!</p>
+			</section>
+		</section>
+
+		<section>
+			<h2>The "jQuery" Function ($)</h2>
+			<section>
+				<p>The jQuery function is what allows you to take advantage of all those awesome jQuery features.  The jQuery function is aliased to the <span class="code">$</span> symbol, which makes accessing it super quick and easy.  Here are some examples</p>
+			</section>
+
+			<h3>Selecting DOM Elements using jQuery</h3>
+			<section>
+				<p>You can pass the jQuery function a CSS selector (as a string) to get back a jQuery object representing the matching elements.</p>
+				
+				<pre class="prettyprint lang-js">
+var items = $("a");
+/* Returns a jQuery object with all the &lt;a&gt; tags on the page */</pre><br>
+				
+				<pre class="prettyprint lang-js">
+var items = $("#container p");
+/* Returns a jQuery object with all the &lt;p&gt; inside the element with id="container" */</pre>
+				<p>By default, the jQuery object searches the entire DOM.  If you want to restrict your search, you can pass the jQuery function a context as a second argument, like this:</p>
+				<pre class="prettyprint lang-js">
+var items = $("li", "ul#special");
+/* Returns a jQuery object with all the &lt;li&gt; tags found within the &lt;ul&gt; tag with id="special" */</pre>
+				<p>Functionally, that last example is the same as:</p>
+				<pre class="prettyprint lang-js">
+var items = $("ul#special").find("li");</pre>
+
+			</section>
+
+			<h3>jQuery Objects</h3>
+			<section>
+				<p>Wait a minute, what's a jQuery Object?  It's just a wrapper object around one or more DOM nodes, which gives them extended functionality.  Above, we saw that a jQuery object can be made by passing a selector to the jQuery function.  If, for some reason, you already have the plain non-jQuery DOM node, you could pass this to the jQuery function and get back a jQuery object:</p>
+				<pre class="prettyprint lang-js">
+var myBoringNode = document.getElementById("myID");
+var myAwesomeJqueryObject = $(myBoringNode);</pre>
+				<p>If you wanted, you could even pass a jQuery object to the jQuery function, and you'd get back...a clone of that jQuery object:</p>
+				<pre class="prettyprint lang-js">
+var myAwesomejQueryObject = $(document.getElementById("myID"));
+var aCloneOfThatObject = $(myAwesomeJQueryObject);</pre>
+				<p>Note that a jQuery object is something created by the jQuery function.  Really though, since functions are objects in javascript, they could technically both be called the "jQuery" object.  But don't do that.  When we say "jQuery function", we mean <span class="code">$()</span>.  When we say "jQuery object", we mean something <span class="code">returned by $()</span>.</p>
+			</section>
+
+			<h3>Making HTML Elements with jQuery</h3>
+			<section>
+				<p>You can also use the jQuery function to create new HTML elements, by passing them a string of HTML, like this:</p>
+				<pre class="prettyprint lang-js">
+var newNode = $("&lt;div&gt;&lt;/div&gt;");
+// Returns a jQuery Object wrapped &lt;div&gt; node</pre>
+                <p>The shorthand for this operation is:</p>
+				<pre class="prettyprint lang-js">
+var newNode = $("&lt;div/&gt;");
+// Does the same as above</pre>
+			</section>
+
+
+			<h3>Testing Selections</h3>
+			<section>
+				<p>Say we want to check if our jQuery selection returned anything.  Here's an example of something that <strong>won't</strong> work:</p>
+				<pre class="prettyprint lang-js">
+if ( $("#container") ){
+	// code in here will run even if the selector found nothing.
+}</pre>
+				<p>Even if it finds nothing, the jQuery function still returns a jQuery object.  Since objects are truthy, the above method won't work.  Instead, we can use the <span class="code">length</span> property of the returned jQuery object to see what it found.</p>
+				<pre class="prettyprint lang-js">
+if ( $("#container").length > 0){
+	// code in here will only run if the selector returned at least 1 thing
+}</pre>
+			
+			</section>
+		</section>
+
+		<section>
+			<h2>Operating on jQuery Objects</h2>
+            <section>
+            	<p>Making something into a jQuery object allows us to do lots of things very easily.  Many of the following functions fall into two categories: <span class="code">getters</span>, and <span class="code">setters</span>.  In almost all cases, getter functions will only operate on the first in the set of matched elements, while setters will operate on all elemenets in the set of matched elements.</p>
+            </section>
+
+            <h3>Working with Classes</h3>
+            <section>
+            	<pre class="prettyprint lang-js">
+var foo = $("ul a");
+foo.addClass("wahoo");
+
+foo.hasClass("wahoo"); // true
+
+foo.removeClass("wahoo");
+
+foo.toggleClass("wahoo");
+// adds the class if it's not present,
+// removes it if it is</pre>
+			</section>
+
+			<h3>Working with HTML attributes</h3>
+			<section>
+				<pre class="prettyprint lang-js">
+var myInput = $("#myInput");
+var inputType = myInput.attr("type"); // Get the input's "type"
+
+if(inputType == "text"){
+	// do something
+} else {
+	// do something else
+}</pre>
+
+				<pre class="prettyprint lang-js">
+var images = $("img");
+images.attr("title", "Carpe Diem!")
+// set the title of all images to "Carpe Diem!"</pre>
+			</section>
+
+			<h3>Working with CSS</h3>
+			<section>
+				<pre class="prettyprint lang-js">
+var myContainer = $("#container");
+var bg_color = myContainer.css("background-color"); // returns an rgb string, NOT hex;
+
+if (bg_color == "rgb(0, 0, 0)"){
+	myContainer.css("color", "white"); // set the css color
+} else {
+	myContainer.css("color", "#000"); // set the css color
+}
+
+/* The css() function applies an inline style, and does NOT
+ * affect any CSS rules in a &lt;style&gt; tag or external
+ * stylesheet!
+ */</pre>
+			</section>
+
+			<h3>Working with HTML</h3>
+			<section>
+				<p>Assume we have the following HTML:</p>
+				<pre class="prettyprint lang-html">
+&lt;div id=&quot;container&quot;&gt;
+    &lt;p&gt;15-237 is awesome!&lt;/p&gt;     
+&lt;/div&gt;</pre>
+              <p>Here's the JS/jQuery:</p>
+              <pre class="prettyprint lang-js">
+var myContainer = $(&quot;#container&quot;);
+var innerHTML = myContainer.html(); // returns &quot;&lt;p&gt;15-237 is awesome!&lt;/p&gt;&quot;
+
+myContainer.prepend(&quot;&lt;p&gt;I'm a prepended paragraph!&lt;/p&gt;&quot;); 
+// inserts into DOM as first child of myContainer
+
+myContainer.append(&quot;&lt;p&gt;I'm an appended paragraph!&lt;/p&gt;&quot;); 
+// inserts into DOM as last child of myContainer 
+
+var myParagraph = $(&quot;p&quot;, myContainer); // selects all paragraphs within myContainer
+myParagraph.append(&quot; Wahoo!&quot;); // appends &quot; Wahoo!&quot; to all of them
+
+var myHTML = myParagraph.html(); // gets the innerHTML of the FIRST element in the set
+alert(myHTML); // &quot;I'm a prepended paragraph! Wahoo!&quot;
+
+var myText = myParagraph.text(); // gets the text of ALL elements in the set, even child nodes
+
+alert(myText); 
+// &quot;I'm a prepended paragraph! Wahoo! 15-237 is awesome! Wahoo! I'm an appended paragraph! Wahoo!&quot;
+
+var newLink = $(&quot;&lt;a href='www.cs.cmu.edu/15-237'&gt;15-237 course website&lt;/a&gt;&quot;);
+myContainer.after(newLink); // insert the newLink after the selected element</pre>
+				<p>
+					<a href="http://jsfiddle.net/dillongrove/jkQaM/#base">JSFiddle</a>
+				</p>
+
+			</section>
+
+			<h3>DOM Traversal / Filtering Selections</h3>
+			<section>
+				<p>Assume the following HTML:</p>
+				<pre class="prettyprint lang-html">
+&lt;div class=&quot;foo&quot; id=&quot;first&quot;&gt;
+    &lt;div class=&quot;foo&quot; id=&quot;second&quot;&gt;
+        &lt;div class=&quot;bar&quot; id=&quot;third&quot;&gt;
+            &lt;div class=&quot;woo&quot; id=&quot;fourth&quot;&gt;
+                
+            &lt;/div&gt;
+            &lt;div class=&quot;woo&quot; id=&quot;fifth&quot;&gt;
+                
+            &lt;/div&gt;
+        &lt;/div&gt;    
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+				<p>Here's the JS/jQuery:</p>
+				<pre class="prettyprint lang-js">
+var first = $("#first");
+
+var x = first.children(".woo"); // travels 1 level down
+alert(x.length); // 0
+
+var y = first.find(".woo"); // travels multiple levels down
+alert(y.length); // 2
+
+var fourth = $("#fourth");
+
+var a = fourth.closest(".foo"); // travels up until it finds something that matches
+alert(a.attr("id")); // second
+
+var b = fourth.next(); // gets the next sibling
+alert(b.attr("id")); //fifth
+
+var c = fourth.next(".foo"); // can filter with selector
+alert(c.length) // 0 (nothing matches filter)
+    
+var d = fourth.parents();
+alert(d.length); // 5 (includes body and html, not seen above in jsfiddle)
+
+var e = fourth.parents(".foo");
+alert(e.length); // 2 (only 2 parents with class of foo)
+
+var f = e.filter("#first"); // filter the selected elements
+alert(f.length) // 1</pre>
+				<p>
+					<a href="http://jsfiddle.net/dillongrove/k68Ce/#base">JSFiddle</a>
+				</p>
+			</section>
+
+			<h3>Explicit Iteration</h3>
+			<section>
+				<p>Iterate over a collection of selected elements using the <span class="code">.each()</span> function.</p>
+				<pre class="prettyprint lang-html">
+&lt;ol&gt;
+    &lt;li&gt;Eat&lt;/li&gt;
+    &lt;li&gt;Sleep&lt;/li&gt;
+    &lt;li&gt;Code&lt;/li&gt;
+    &lt;li&gt;Repeat&lt;/li&gt;
+&lt;/ol&gt;​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​	</pre><br>
+                <pre class="prettyprint lang-js">
+$("li").each(function(){
+    var text = $(this).text();
+    alert(text);
+    // use "return false" to stop iteration prematurely
+});</pre>
+				<p>
+					<a href="http://jsfiddle.net/dillongrove/KNUCQ/#base">JSFiddle</a>
+				</p>
+				<p>Inside the body of the <span class="code">each</span> function, you'll notice the keyword <span class="code">this</span>.  Here, <span class="code">this</span> refers to the plain DOM node you're currently operating on, and <strong>NOT</strong> a jQuery object.  If you need the node to be a jQuery object, simpy wrap it in the jQuery function, using <span class="code">$(this)</span>, as shown in the example above.</p>
+
+			</section>
+
+			<h3>Chaining</h3>
+			<section>
+				<p>We already know that DOM traversal functions (like find or children) return a jQuery object.  However, even jQuery functions not associated with filtering selections or DOM traversal return a jQuery object.  In this case, they return the jQuery object that they were called on.  This is a very useful construct, and allows us to "chain" together multiple jQuery functions like so:</p>
+				<pre class="prettyprint lang-js">
+$("myNode").addClass("basil").attr("id", "parsely").css("font-size", "24px");</pre>
+				<p>Read more about chaining <a href="http://tobiasahlin.com/blog/quick-guide-chaining-in-jquery/">here</a>.</p>
+			</section>
+
+			<h3>Miscellaneous</h3>
+            <ul class="no_bullet">
+            	<li>
+            		<strong>Get the computed height of an element</strong>
+            		<br>
+            		<pre class="prettyprint lang-js">
+var theHeight = $("#container").height();
+// Returns the actual computed height of the element, regardless of what CSS specifies</pre>
+            	</li>
+            	<li>
+            		<strong>Get the position of an element relative to the document</strong>
+            		<br>
+            		<pre class="prettyprint lang-js">
+var theOffset = $("#container").offset();
+// Returns an object containing "left" and "top" offsets
+
+var x = theOffset.left;
+var y = theOffset.top;</pre>
+            	</li>
+            	<li>
+            		<strong>Get the vertical scroll amount</strong>
+            		<br>
+            		<pre class="prettyprint lang-js">
+var scrollAmount = $("body").scrollTop();
+// Returns the number of pixels out of view at the top due to scrolling
+// Can target other scrollable elements besides just the page</pre>
+            	</li>
+            </ul>
+
+		</section>
+
+		<section>
+			<h2>Events</h2>
+
+			<p>jQuery provides an easy interface for working with events.</p>
+			<h3>The Document Ready Event</h3>
+			<section>
+				<pre class="prettyprint lang-js">
+$(document).ready(function(){
+	// code goes here!
+});</pre>
+				<p>This event is fired once the DOM has finished loading.  In most cases, whatever javascript or jQuery we're writing needs to the DOM to be fully loaded in order to work.  Otherwise, the elements we plan to operate on won't exist yet.</p>
+				<p>The <span class="code">.ready()</span> event is similar to the normal DOM <span class="code">load</span> event we've already been using, with one key difference.  The <span class="code">.ready()</span> event is fired as soon as the DOM is loaded, while the <span class="code">load</span> event waits until all assets (like css or images) have been fully loaded too.</p>
+			</section>
+
+			<h3>The Click Event - A Quick Example</h3>
+			<section>
+				<pre class="prettyprint lang-html">
+&lt;div id=&quot;container&quot;&gt;
+    &lt;a href=&quot;www.google.com&quot;&gt;Google&lt;/a&gt;&lt;br&gt;
+    &lt;a href=&quot;www.apple.com&quot;&gt;Apple&lt;/a&gt;&lt;br&gt;
+    &lt;a href=&quot;www.microsoft.com&quot;&gt;Microsoft&lt;/a&gt;&lt;br&gt;
+&lt;/div&gt;</pre><br>
+				<pre class="prettyprint lang-js">
+​​$(document).ready(function(){
+    $("a").click(function(event){
+        var foo = this; // refers to the DOM node that called the event
+        var bar = $(this) // same as above, but wrapped in a jQuery object
+        // good so far?
+            
+        var baz = event.target; 
+        // the element where the event initiated
+        // may not be the same as the element handling the event!
+        
+       bar.css("color", "red");
+        
+        event.preventDefault();
+        // prevents the default action (going to the link) from happening
+    });
+    
+    $("#container").click(function(event){
+        var currentThis = $(this).attr("id");
+        var eventTarget = $(event.target);
+        
+        alert("current this: " + currentThis);
+        alert("event target: " + eventTarget.text());
+
+        // no default action for clicking a div, no preventDefault needed        
+    });
+});​</pre>
+`				<p>
+	<a href="http://jsfiddle.net/dillongrove/v3TNz/#base">JSFiddle</a>
+				</p>
+			</section>
+
+			<h3>Other Events</h3>
+			<section>
+				<p>There are many, many other events.  Here's a small sample:</p>
+				<ul>
+					<li><span class="code">.dblclick()</span></li>
+					<li><span class="code">.focus()</span></li>
+					<li><span class="code">.hover()</span></li>
+					<li><span class="code">.mouseenter()</span></li>
+					<li><span class="code">.mouseleave()</span></li>
+					<li><span class="code">.mouseup()</span></li>
+					<li><span class="code">.mousedown()</span></li>
+					<li><span class="code">.mousemove()</span></li>
+				</ul>
+				<p>By the way, in most cases, calling one of the functions above without passing it a handler function simply triggers that event on the specified elements.</p>
+
+			</section>
+
+			<h3>More On Events</h3>
+			<section>
+				<p>The jQuery site has an awesome tutorial on events that explains some of the intricacies involved <a href="http://docs.jquery.com/Tutorials:AJAX_and_Events">here</a>.</p>
+
+				See the full documentation for jQuery Events <a href="http://api.jquery.com/category/events/">here</a>.
+			</section>
+		</section>
+
+		<section>
+			<h2>Effects</h2>
+			<section>
+				<p>jQuery provides quick access to some simple animations through it's effects funtions.</p>
+			</section>
+				
+			<h3>Example 1</h3>
+			<section>
+				<strong>The HTML</strong><br>
+				<pre class="prettyprint lang-html">
+&lt;div id=&quot;first&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;second&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;third&quot;&gt;&lt;/div&gt;
+&lt;a href=&quot;#&quot;&gt;Reset&lt;/a&gt;</pre><br>
+
+				<strong>The CSS</strong><br>
+				<pre class="prettyprint lang-css">
+​body { margin: 10px; }
+div { width: 100px; height: 100px; margin-bottom: 10px; }
+#first  { background-color: blue }
+#second​ { background-color: red }
+#third  { background-color: green }​</pre><br>
+	
+				<strong>The JS + jQuery</strong><br>
+				<pre class="prettyprint lang-js">
+​$(document).ready(function(){
+    $("#first").click(function(){
+        $(this).hide();
+    });
+    $("#second").click(function(){
+        $(this).fadeOut(1000);
+    });
+    $("#third").click(function(){
+        $(this).slideUp("slow")
+    });
+    $("a").click(function(){
+        $("#first").show(0, function(){
+            $("#second").fadeIn(1000, function(){
+                $("#third").slideDown(1000);
+            });
+        });            
+    });
+});​</pre>
+				<p>
+					<a href="http://jsfiddle.net/dillongrove/83scA/">JSFiddle</a>
+				</p>
+			</section>
+
+			<h3>Example 2 (jQuery compared with Javascript)</h3>
+			<section>
+				<strong>The HTML</strong>
+				<br>
+				<pre class="prettyprint lang-html">
+&lt;html&gt;
+&lt;body&gt;
+    &lt;div class='square blue'&gt;&lt;/div&gt;
+    &lt;div class='square blue classNameWith_blue_butShouldNotToggle'&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+				<br>
+				<strong>The CSS</strong>
+				<br>
+				<pre class="prettyprint lang-css">
+.square {
+    width: 5em;
+    height: 5em;
+    margin: 2em;
+    border: 1px solid black;    
+}
+
+.blue {
+    background-color: blue;   
+}</pre>
+				<br>
+				<strong>The jQuery/JS</strong>
+				<br>
+				<pre class="prettyprint lang-js">
+//toggling a class
+//===========================
+var useJQuery = false
+
+
+//jquery
+//===========================
+if (useJQuery) {
+    setInterval(function() {
+        $('.square').toggleClass('blue');
+    }, 1000);
+}
+
+
+//vanilla JS
+//===========================
+var toggleClass = function(dom, targetName) {
+    var classNames = dom.className.split(' ');
+    for (var i = 0; i &lt; classNames.length; i++) {
+        if (classNames[i] === targetName) {
+            dom.className = ' ' + dom.className + ' ';
+            dom.className = dom.className.replace(' ' + targetName + ' ', ' ');
+            dom.className = dom.className.substring(1, dom.className.length - 1);
+            hadClass = true;
+            return;
+        }
+    }
+    dom.className += ' ' + targetName;
+}
+
+if (!useJQuery) {
+    setInterval(function() {
+        var squares = document.getElementsByClassName('square');
+        for (var i = 0; i &lt; squares.length; i++) {
+            toggleClass(squares[i], 'blue');
+        }
+    }, 1000);
+}</pre>
+				<br>
+				<p><a href="http://jsfiddle.net/dillongrove/xZhrU/#base">JSFiddle</a></p>
+			</section>
+
+			<h3>Example 3</h3>
+			<section>
+				<strong>The HTML</strong>
+				<br>
+				<pre class="prettyprint lang-html">
+&lt;div class=&quot;accordion&quot;&gt;
+    &lt;h1&gt;This gives the accordion effect&lt;/h1&gt;
+    &lt;div class=&quot;inside&quot;&gt;
+        &lt;p&gt;This stuff is inside the accordion&lt;/p&gt;
+        &lt;p&gt;You can't see it unless you unfold the accordion&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;accordion&quot;&gt;
+    &lt;h1&gt;Another one&lt;/h1&gt;
+    &lt;div class=&quot;inside&quot;&gt;
+        &lt;p&gt;This stuff is inside the accordion&lt;/p&gt;
+        &lt;p&gt;Just another example!&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+				<br>
+				<strong>The CSS</strong>
+				<br>
+				<pre class="prettyprint lang-css">
+.accordion {
+    width: 80%;
+    background-color: #E0E0E0;
+    margin: 10px 5px;
+}
+
+.accordion h1{
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #F8F8F8;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.accordion p {
+    padding: 10px;
+}
+
+.inside {
+    display: none;
+}</pre>
+				<br>
+				<strong>The jQuery/JS</strong>
+				<br>
+				<pre class="prettyprint lang-js">
+$(document).ready(function() {
+    
+    // ties an event to .accordion click
+    $('.accordion').click(function() {
+        // toggles the sliding of elements with .inside class
+        // ONLY those that are children to this
+        $(this).children('.inside').slideToggle();
+    });
+        
+});​</pre>
+				<br>
+				<p><a href="http://jsfiddle.net/dillongrove/acbFj/#base">JSFiddle</a></p>
+			</section>
+
+
+			<h3>Example 4</h3>
+			<section>
+				<strong>The HTML</strong>
+				<br>
+				<pre class="prettyprint lang-html">
+&lt;div class=&quot;alert&quot;&gt;
+    &lt;h1&gt;Warning&lt;/h1&gt;
+    &lt;p&gt;There was a configuration error&lt;/p&gt;
+    &lt;span class=&quot;close&quot;&gt;x&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;alert&quot;&gt;
+    &lt;h1&gt;Warning&lt;/h1&gt;
+    &lt;p&gt;There was an unknown error&lt;/p&gt;
+    &lt;span class=&quot;close&quot;&gt;x&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;alert&quot;&gt;
+    &lt;h1&gt;Warning&lt;/h1&gt;
+    &lt;p&gt;There were random errors&lt;/p&gt;
+    &lt;span class=&quot;close&quot;&gt;x&lt;/span&gt;
+&lt;/div&gt;
+&#x200b;</pre>
+				<br>
+				<strong>The CSS</strong>
+				<br>
+				<pre class="prettyprint lang-css">
+body {
+    margin: 20px;
+    font-family: 'Lucida Grande', arial, sans-serif;
+}
+
+.alert {
+    background-color:#FFC0C0;
+    color: #662020;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.alert h1 {
+    display: inline;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* to keep it on the same line */
+.alert p {
+    display: inline;
+}
+
+.alert .close {
+    color: #441010;
+    float: right;
+    cursor: pointer;
+}
+
+/* mouseover pseudo-class */
+.alert .close:hover {
+    color: #A08080;
+}</pre>
+				<br>
+				<strong>The jQuery/JS</strong>
+				<br>
+				<pre class="prettyprint lang-js">
+$(document).ready(function() {
+    // tie click event to all .close that are children of .alert
+    $('.alert &gt; .close').click(function() {
+        // fade out the parent (the .alert) in 500ms
+        $(this).parent().fadeOut(500);
+    });
+});</pre>
+				<br>
+
+				<p><a href="http://jsfiddle.net/dillongrove/3DhMz/#base">JSFiddle</a></p>
+			</section>
+
+
+		</section>
+		<section>
+			<h2>Custom Animations</h2>
+
+			<h3>A Quick Example</h3>
+			<section>
+				<strong>The HTML</strong>
+				<br>
+				<pre class="prettyprint">
+&lt;div id=&quot;test&quot;&gt;Content&lt;/div&gt;</pre><br>
+				<strong>The CSS</strong>
+				<br>
+				<pre class="prettyprint">
+#test {
+    display: block;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+}​</pre><br>
+				<strong>The jQuery/JS</strong>
+				<br>
+				<pre class="prettyprint">
+$(document).ready(function() {
+    $('#test').click(function() {
+        $(this).animate({
+            height: '300px',
+            width: '300px',
+            margin: '100px'
+        }, 1000, function() {
+            $(this).html('Done animating!');
+        });
+    });  
+});​</pre><br>
+				<a href="http://jsfiddle.net/dillongrove/byM2Z/#base">JSFiddle</a>
+			</section>
+
+		</section>
+		<section>
+			<h2>AJAX</h2>
+
+			<h3>An AJAX Example: JS vs jQuery</h3>
+			<section>
+				<strong>The HTML</strong><br>
+				<pre class="prettyprint lang-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;h2&gt;Carnegie Mellon's Twitter&lt;/h2&gt;
+        &lt;div id=&quot;content&quot;&gt;Loading...&lt;/div&gt;
+    &lt;/body&gt;
+&lt;html&gt;</pre>
+				<br>
+				<strong>The jQuery/JS</strong><br>
+				<pre class="prettyprint linenums lang-js">
+var useJQuery = false;
+
+var url = 'http://twitter.com/status/user_timeline/CarnegieMellon.json';
+
+//jquery
+//====================================
+var jqueryCallback = function(items) {
+    var content = $("#content");
+    content.empty();
+    for (var i = 0; i &lt; items.length; i++) {
+        var div = $("&lt;div&gt;");
+        div.text(items[i].text);
+        content.append(div);
+        content.append($("&lt;br&gt;"));
+    }
+}
+if (useJQuery) {
+    $.ajax({
+        url: url + '?count=10&callback=?',
+        dataType: 'json',
+        success: jqueryCallback
+    });
+}
+
+//vanilla js
+//===================================
+var vanillaJSCallback = function(items) {
+    var content = document.getElementById('content');
+    content.innerHTML = '';
+    for (var i = 0; i &lt; items.length; i++) {
+        var div = document.createElement('div');
+        div.innerText = items[i].text;
+        content.appendChild(div);
+        content.appendChild(document.createElement('br'));
+    }
+}
+
+function loadJS(url, callback) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    script.onload = callback;
+    document.body.appendChild(script);
+}
+
+function getJSON(url, callbackKey, callback, extras) {
+    if (window.jsonpCallbackId === undefined) window.jsonpCallbackId = 0;
+    window.jsonpCallbackId++;
+    var callbackName = 'jsonpcallback_' + window.jsonpCallbackId;
+    window[callbackName] = function(json) {
+        delete window[callbackName];
+        callback(json);
+    }
+    if (extras !== undefined) loadJS(url + '?' + callbackKey + '=' + callbackName + '&amp;' + extras);
+    else loadJS(url + '?' + callbackKey + '=' + callbackName);
+}
+if (!useJQuery) {
+    getJSON(url, 'callback', vanillaJSCallback, 'count=10');
+}​</pre>
+				<br>
+				<p>
+					<a href="http://jsfiddle.net/dillongrove/nHzEd/#base">JSFiddle</a>
+				</p>
+			</section>
+
+
+		</section>
+
+		<section>
+			<h2>jQuery Documentation</h2>
+			<section>
+				<p>It's awesome and you should read it <a href="http://docs.jquery.com/Main_Page">here</a>.  Look on the left side under "API reference"</p>
+			</section>
+		</section>
+
+
+
+		<footer>
+			<span>jQuery</span>15-237: Building Cross-Platform Mobile Web Apps
+		</footer>
+	</body>
+</html>

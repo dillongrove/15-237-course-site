@@ -1,0 +1,343 @@
+	<!DOCTYPE HTML>
+	<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link href="css/prettify.css" type="text/css" rel="stylesheet" />
+		<link href="css/desert.css" type="text/css" rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+
+		<script type="text/javascript" src="js/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+		<div id="notes_header">
+			<span>15-237: Building Cross-Platform Mobile Web Apps</span>
+			<h1>HTML</h1>
+
+		</div>
+
+		<section>
+			<h2>HTML Basics</h2>
+			<h3>Intro</h3>
+			<section>
+				<p>
+					HTML is responsible for structuring the <strong>content</strong> It's a markup language, not a programming language.  There are no control structures or logic--just a bunch of tags to memorize.
+			
+					Your web browser is responsible for taking an HTML document (which is what is actually returned by servers) and rendering it as a webpage.
+				</p>
+			</section>
+			
+			<h3>Tags:</h3>
+			<section>
+				<p>HTML is made up of a bunch of "tags" within angle brackets.  They look like this:</p>
+				<pre class="prettyprint lang-html">
+&lt;html&gt; Stuff! &lt;/html&gt;</pre>
+				<p>
+					HTML tags can also have optional attributes attached to them, like this:
+				</p>
+				<pre class="prettyprint lang-html">
+&lt;html class=&quot;foo&quot;&gt; Stuff! &lt;/html&gt;</pre>
+				<p>Some tags need to be closed, and some don't.  Unpaired elements work with only an opening tag:</p>
+				<pre class="prettyprint lang-html">
+&lt;p&gt;A bunch of random text here!&lt;/p&gt; &lt;!-- I'm a paragraph tag, I need to be closed! --&gt;
+&lt;img src=&quot;myImage.png&quot; alt=&quot;My Image!&quot; /&gt; &lt;!-- I'm a IAMGE tag, I don't need to be closed! --&gt;</pre>
+			<p>The purpose of tags is to <strong>semantically represent</strong> what's inside them, if possible.  This is for your sanity, as well as for search engines (though it matters less now than it did).  There are <a href="http://www.w3schools.com/html5/html5_reference.asp">many, many tags available.</a></p>
+			</section>
+			
+			<h3>A (very) Basic HTML Page:</h3>
+			<section>
+				<pre class="prettyprint linenums: lang-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Placeholder Title&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+				<p>Alright, so line-by-line:</p>
+				<ul class="no_bullet">
+					<li><span class="code">&lt;!DOCTYPE html&gt;</span><br>
+						<p>This is what’s referred to as a doctype declaration.  It tells the browser what kind of document you have.  The declaration seen here is an HTML5 declaration.  Older doctypes used to look a lot worse, like this:</p>
+					<pre class="prettyprint">
+&lt;!DOCTYPE HTML 
+	PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;
+	&quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;</pre>
+					</li>
+					<li><span class="code">&lt;html&gt; &lt;/html&gt;</span><br>
+						<p>This tag specifies an html document.  Everything in your document (except you doctype) goes inside this.</p>
+					</li>
+					<li><span class="code">&lt;head&gt; &lt;/head&gt;</span><br>
+						<p>This tag contains the <i>non-displayable</i> parts of your web page.  There are many, many things that can go here, but we'll see those a little bit later.</p>
+					</li>
+					<li><span class="code">&lt;body&gt; &lt;/body&gt;</span><br>
+						<p>This is where everything <i>displayable</i> goes.  The browser will attempt to display everything you put inside this tag.</p>
+					</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h2>Common HTML Tags</h2>
+			<h3>General:</h3>
+			<section>
+				<ul class="no_bullet">
+					<li><span class="code">&lt;a&gt;</span><br>
+						<p>Creates a hyperlink to the resource specified in the href attribute.  For example:</p>
+						<pre class="prettyprint lang-html">
+&lt;a href=&quot;http://www.example.com&quot;&gt;I'm a hyperlink!&lt;/a&gt;</pre>
+					</li>
+			
+					<li><span class="code">&lt;p&gt;</span><br>
+						<p>Denotes a pargraph.</p>
+					</li>
+					<li><span class="code">&lt;h1&gt;, &lt;h2&gt;, &lt;h3&gt;, &lt;h4&gt;, &lt;h5&gt;, &lt;h6&gt;</span><br>
+						<p>Denotes a header.  <span class="code">&lt;h1&gt;</span> represents the most important or prominent header, and <span class="code">&lt;h6&gt;</span> the least prominent or important.  You likely won’t need to go all the way to <span class="code">&lt;h6&gt;</span> for the majority of your projects.</p>
+					</li>
+					<li><span class="code">&lt;img&gt;</span><br>
+						<p>Displays an image.  For example:</p>			
+						<pre class="prettyprint lang-html">
+&lt;img src=&quot;example.jpg&quot; /&gt;</pre>
+					</li>
+				</ul>
+			</section>
+			
+			<h3>Containers:</h3>
+			<section>
+				<ul class="no_bullet">
+					<li><span class="code">&lt;div&gt;</span><br>
+						<p>An element that has no semantic meaning.  Used primarily as a “container” when no semantically correct tag exists.  This is a 
+							<strong>block-level element</strong> (more on this in the CSS Notes).</p>
+					</li>
+					<li><span class="code">&lt;span&gt;</span><br>
+						<p>Another element that has no semantic meaning.  Serves much the same role as <span class="code">&lt;div&gt;</span>, but is in an <strong>inline element</strong> (again, more on this in the CSS section).</p>
+					</li>
+				</ul>
+			</section>
+			
+			<h3>Lists:</h3>
+			<section>
+				<ul class="no_bullet">
+					<li><span class="code">&lt;ul&gt;</span><br>
+						<p>An un-ordered list.  Contains one or more <span class="code">&lt;li&gt;</span> (list item).  By default, the browser will render each <span class="code">&lt;li&gt;</span> within the <span class="code">&lt;ul&gt;</span> as a bullet point.  For example:</p>
+						<pre class="prettyprint lang-html">
+&lt;ul&gt;
+    &lt;li&gt; Item One &lt;/li&gt;
+    &lt;li&gt; Item Two &lt;/li&gt;
+    &lt;li&gt; Item Three &lt;/li&gt;
+&lt;/ul&gt;</pre>
+					</li>
+					<li><span class="code">&lt;ol&gt;</span><br>
+						The same as un-ordered list, but ordered!  By default, the browser will automatically number all <span class="code">&lt;li&gt;</span>’s inside an <span class="code">&lt;ol&gt;</span>.
+					</li>
+				</ul>
+			</section>
+			
+			<h3>Other:</h3>
+			<section>
+				<ul class="no_bullet">
+					<li><span class="code">&lt;iframe&gt;</span>
+						<p>
+							Used to display a webpage within a webpage (Inception webpage!).  Frames are generally considered bad practice (in fact, all other kinds of frames have been disallowed in HTML5), but necessary for some things.  Facebook “Like” buttons are done using iframes.  Example:
+						</p>
+						<pre class="prettyprint lang-html">
+&lt;iframe src=&quot;URL&quot;&gt;&lt;/iframe&gt;</pre>				
+					</li>
+					<li><span class="code">&lt;!-- this is a comment --&gt;</span>
+						<p>Used to place comments directly in the source code</p>
+					</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h2>Tables</h2>
+				<p>You should use them for tabular data, and that’s it!  They are not a replacement for actually learning how to do proper layout in CSS (more on that later)!  In any case, if you absolutely must use a table, here’s an example from w3:</p>
+				<pre class="prettyprint linenums: lang-html">
+&lt;table&gt;
+    &lt;tr&gt; &lt;!-- a table row --&gt;
+        &lt;td&gt;row 1, cell 1&lt;/td&gt; &lt;!-- a table data cell --&gt;
+        &lt;td&gt;row 1, cell 2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;row 2, cell 1&lt;/td&gt;
+        &lt;td&gt;row 2, cell 2&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</pre>
+		</section>
+
+
+		<section>
+			<h2>IDs and Classes</h2>
+				<p>
+				Perhaps the most common attributes on HTML tags are “id” and “class”.  These attributes allow you to access HTML elements in external resources like stylesheets or scripts.  The main difference is that <strong>IDs</strong> should only be used <strong>once per page</strong>, while <strong>Classes</strong> should be used <strong>multiple times per page</strong>.  Note that this <i>isn’t</i> enforced by the browser.  Your page will likely still render fine if you have two elements with the same ID.  But it’s incorrect, so don’t do it.  (getElementByID will, by the way, only return the first element with the specified ID that it finds).</p>
+			
+				<p>An element can have both an id and a class.  It can also have more than one class.  For example:</p>
+				<pre class="prettyprint lang-html">
+&lt;div id=&quot;basic_info&quot; class=&quot;sidebar pull-right&quot;&gt;</pre>
+		</section>
+
+		<section>
+			<h2>HTML Forms:</h2>
+			<h3>Form Basics</h3>
+			<section>
+				<p>Forms are used for getting input! </p>
+				<pre class="prettyprint linenums: lang-html">
+&lt;form&gt;
+    ...various input elements...
+&lt;/form&gt;</pre>
+			</section>
+			
+			<h3>Input Elements</h3>
+			<section>
+				<p>Here are some of the various input elements you can use inside forms:</p>
+				
+				<ul class="no_bullet">
+					<li><strong>Button</strong>
+						<p>Just a button.  The <span class="code">value</span> attribute specifies the text to be displayed on the button.</p>
+						<pre class="prettyprint lang-html">
+&lt;input type=&quot;button&quot; value=&quot;submit&quot; /&gt;</pre>
+					</li>
+					<li><strong>Text Field</strong>
+						<p>Used simply for inputting single lines of text.</p>
+						<pre class="prettyprint lang-html">
+&lt;input type=&quot;text&quot; name=&quot;zipcode&quot; /&gt;</pre>
+					</li>
+					<li><strong>Password</strong>
+						<p>A text field with masked characters (asterisks).</p>
+						<pre class="prettyprint lang-html">
+&lt;input type=&quot;password&quot; name=&quot;pwd&quot; /&gt;</pre>
+					</li>
+					<li><strong>Text Area</strong>
+						<p>For inputting multiple lines of text.</p><pre class="prettyprint lang-html">
+&lt;textarea rows=&quot;10&quot; cols=&quot;30&quot;&gt;&lt;/textarea&gt;</pre>
+					</li>
+					<li><strong>Label</strong>
+						<p>For labeling form elements.</p><pre class="prettyprint linenums: lang-html">
+&lt;label for=&quot;username&quot;&gt;User Name: &lt;/label&gt;
+&lt;input type=&quot;text&quot; name=&quot;username&quot; id=&#x201d;username&#x201d; /&gt;</pre>
+					</li>
+					<li><strong>Radio Buttons</strong>
+						<p>For selecting one choice out of a limited number of choices.</p>
+						<pre class="prettyprint lang-html">
+&lt;input type=&quot;radio&quot; name=&quot;sex&quot; value=&quot;male&quot; /&gt; Male
+&lt;input type=&quot;radio&quot; name=&quot;sex&quot; value=&quot;female&quot; /&gt; Female</pre>
+					</li>
+					<li><strong>Dropdowns</strong>
+						<p>Exactly what it sounds like.</p>
+						<pre class="prettyprint linenums: lang-html">
+&lt;select name=&quot;preferred_title&quot;&gt;
+    &lt;option value=&quot;&quot;&gt;None&lt;/option&gt;
+    &lt;option value=&quot;Mrs.&quot;&gt;Mrs.&lt;/option&gt;
+    &lt;option value=&quot;Ms.&quot;&gt;Ms.&lt;/option&gt;
+    &lt;option value=&quot;Miss&quot;&gt;Miss&lt;/option&gt;
+    &lt;option value=&quot;Mr.&quot;&gt;Mr.&lt;/option&gt;
+    &lt;option value=&quot;Dr.&quot;&gt;Dr.&lt;/option&gt;
+&lt;/select&gt;</pre>
+					</li>
+					<li><strong>Checkboxes</strong>
+						<p>For selecting zero or more options out of a limited number of choices.</p>
+						<pre class="prettyprint lang-html">
+&lt;input type=&quot;checkbox&quot; name=&quot;vehicle&quot; value=&quot;Bike&quot; /&gt; I have a bike
+&lt;input type=&quot;checkbox&quot; name=&quot;vehicle&quot; value=&quot;Car&quot; /&gt; I have a car</pre>
+					</li>
+				</ul>
+				
+				<p>
+					Input elements should always contain a <span class="code">name</span> attribute.  This serves two main purposes:
+				</p>
+					<ul>
+						<li><strong>Identifying data when it is submitted to the server</strong>
+							The name is submitted with the form data, and essentially becomes the variable name for that input on the server.
+						</li>
+						<li><strong>Specifying that certain form elements are related</strong>
+							For example, the name attribute is used on radio buttons to specify which group they belong to (see the radio button example above).  Here, the browser will only allow one radio button from each “group” to be selected at any given time.
+						</li>
+					</ul>
+			</section>
+			
+			<h3>HTML Form Example + Validation</h3>
+			<section>
+				<p>Here's a quick example of an html form, with some rudimentary validation built-in thanks to javascript!  Try it out yourself <a href="http://jsfiddle.net/fxhhG/">here</a>. </p>
+				<pre class="prettyprint linenums: lang-html">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+      function submitTheForm() {
+        var input = document.getElementById('textfield');
+        //parseInt returns NaN if it fails to parse a number
+        if (isNaN(parseInt(input.value, 10)) === true)  {
+          // use regular expressions to do validation better
+          alert(&quot;Not valid!! You didn't type a number&quot;);
+        } else {
+          alert(&quot;Valid! You typed a number&quot;);
+        }
+      }
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form name=&quot;myform&quot; action=&quot;javascript:submitTheForm()&quot;&gt;
+      &lt;input id=&quot;textfield&quot; name=&quot;Text&quot; type=&quot;text&quot; placeholder=&quot;Input only a number&quot;&gt;
+      &lt;input name=&quot;Submit&quot;  type=&quot;submit&quot; value=&quot;Update&quot;/&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+			</section>
+		</section>
+
+		<section>
+			<h2>HTML Markup Validation</h2>
+			<p>One good way to make sure your HTML is valid is to---validate it!  This can be done using the the <a href="http://validator.w3.org/">W3 Markup Validation</a> Service.  It’s really picky, but it has good advice--listen to it!</p>
+		</section>
+
+		<section>
+			<h2>HTML5</h2>
+			<h3>What is HTML5?</h3>
+			<section>
+				<p>It’s a <strong>standard</strong>, defined by the W3C.  That’s it.  It describes what HTML <i>should</i> do.  It’s up to individual browsers to implement the W3 spec, and they’re not really required to do so.  Some browsers have supported most of HTML5 since 2007.  Some still don’t.  HTML5, as of August 2012, was <i>technically</i> still under development.</p>
+			
+			</section>
+			
+			<h3>HTML5 New Features</h3>
+			<section>
+				<p>HTML5 added a few new tags, simpler syntax for some elements, and a new set of APIs for use with Javascript.  Canvas is one of these new APIs by the way!   HTML5 was also built with cross-platform applications in mind.</p>
+			
+				<p>We'll cover many more HTML5 features later in the semester.  For now-here's a sample--the new audio and video tags:</p>
+				<ul class="no_bullet">
+					<li><span class="code">&lt;video&gt;</span>
+						<p>Made to replace flash videos, allows video to be directly embedded in websites. Multiple filetypes should be used for cross-browser compatibility.  For example:</p>
+						<pre class="prettyprint linenums: lang-html">
+&lt;video width=&#x201d;640&#x201d; height=&#x201d;360&#x201d;&gt;
+    &lt;source src=&#x201d;myvideo.m4v type=&#x201d;video/mp4&#x201d;/&gt; &lt;!-- Safari MPEG4 --&gt;
+    &lt;source src=&#x201d;myvideo.ogg type=&#x201d;video/ogg&#x201d;/&gt; &lt;!-- Firefox Ogg --&gt;
+&lt;/video&gt;</pre>
+					</li>
+					<li><span class="code">&lt;audio&gt;</span>
+						<p>Play audio in the browser (great for games). As with <span class="code">&lt;video&gt;</span>, multiple filetypes should be used for cross-browser compatibility. For example:</p>
+						<pre class="prettyprint linenums: lang-html">
+&lt;audio&gt;
+    &lt;source src=&#x201d;song.ogg&#x201d; type=&#x201d;audio/ogg&#x201d; /&gt;
+    &lt;source src=&#x201d;song.mp3&#x201d; type=&#x201d;audio/mpeg&#x201d; /&gt;
+&lt;/audio&gt;</pre>
+					</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h2>HTML Escape Sequences</h2>
+			<p>What happens if you want your page to display a character that's usually used in HTML syntax?  Like in many other programming languages, you have to use an escape sequence.  For example, to display a <span class="code">&quot;&gt;&quot;</span> you would type <span class="code">"&amp;gt;"</span>.  For an exhaustive list of all available characters and their corresponding escape sequences, see <a href="http://www.ascii.cl/htmlcodes.htm">this page</a> (look under the HTML Name column).</p>
+		</section>
+
+		<section>
+			<h2>The DOM (Document Object Model)</h2>
+			<p>Web Developers like to throw around the word "DOM" a lot.  Technically, the DOM is an API (Application Programming Interface) for HTML and XML.  It allows you to traverse and interact with it's content through various scripting languages (in our case, Javascript).</p>
+		</section>
+
+		<footer>
+			<span>HTML</span>15-237: Building Cross-Platform Mobile Web Apps
+		</footer>
+	</body>
+</html>

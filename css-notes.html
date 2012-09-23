@@ -1,0 +1,514 @@
+	<!DOCTYPE HTML>
+	<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link href="css/prettify.css" type="text/css" rel="stylesheet" />
+		<link href="css/desert.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/style.css" rel="stylesheet" />
+
+		<script type="text/javascript" src="js/prettify.js"></script>
+	</head>
+	<body onload="prettyPrint()">
+		<div id="notes_header">
+			<span>15-237: Building Cross-Platform Mobile Web Apps</span>
+			<h1>CSS</h1>
+
+		</div>
+
+		<section>
+			<h2>CSS Basics</h2>
+
+			<h3>Intro</h3>
+			<section>
+				<p>
+					CSS (Cascading Style Sheets) allow us to alter the <strong>presentation</strong> of our page.  You’ll remember that HTML handles the <strong>content</strong>.  This separation of duties is very important.
+				</p>
+			</section>
+
+			<h3>CSS Rules</h3>
+			<section>
+				<p>
+					CSS is made up of one more <strong>rules</strong>.  A rule has two main parts, a <strong>selector</strong> and one or more <strong>declarations</strong>.  Each declaration itself consists of a <strong>property</strong> and a <strong>value</strong>.  Here's an example:</p>
+					<pre class="prettyprint lang-css">
+p {
+	font-size: 24px;
+	color: #777777;
+}</pre>
+				<p>
+					The selector is first, and describes which HTML elements the following declarations should affect.  In this case, it's just  <span class="code">p</span> which means "select all pargraph elements".  HTML tag names are one type of selector, but there are many, many more types of selectors.  More on that soon.
+				</p>
+
+				<p>
+					After the selector, we have two declarations.  The first sets the <span class="code">font-size</span> property to 24px and the other sets the color property to <span class="code">#777777</span>, a light gray.
+				</p>
+			</section>
+
+			<h3>Using Multiple Selectors</h3>
+			<section>
+				<p>By the way, if you want the same styles to apply to more than one selector, you don't have to copy all the styles into a different rule.  Instead, simply separate multiple selectors with commas, like so:</p>
+<pre class="prettyprint lang-css">
+p, blockquote {
+	line-height: 16px;
+}</pre>
+				<p>Now, both <span class="code">&lt;p&gt;</span>'s and <span class="code">&lt;blockquote&gt;</span>'s have a line-height of 16px.</p>
+			</section>
+
+			<h3>Where can I put CSS?</h3>
+			<section>
+				<p>
+				Lot's of places!
+				</p>
+
+				<p>
+					<strong>Inline</strong> -- attached directly to an opening HTML tag via the &quot;style&quot; attribute, like so:
+				</p>
+				<pre class="prettyprint lang-html">
+&lt;p style="font-size: 24px; color: #77777"&gt; ... &lt;/p&gt;</pre>
+				<ul>
+					<li>No selector needed here, we already know the HTML element to apply the styles to. </li>
+					<li>Inline styling is BAD because it violates the separation of content and presentation.</li>
+				</ul>
+				<br>
+
+				<p>
+					<strong>Inside a style tag in the <span class="code">&lt;head&gt;</span> of the document,</strong> like so:
+				</p>
+				<pre class="prettyprint lang-html">
+&lt;html&gt;
+    &lt;head&gt;&lt;style&gt; p#foo { font-size: 24px; color: #777777 }&lt;/style&gt;&lt;/head&gt;
+    &lt;body&gt;&lt;p id=&#x201d;foo&#x201d;&gt; stuff &lt;/p&gt;&lt;/body&gt;
+&lt;/html&gt;</pre>
+				<ul>
+					<li>We're finally using selectors (which is good), but the content and presentation and content are still in the same file, which isn't ideal.  The much better way to do this is...
+				</ul>
+				<br>
+
+				<p>
+					<strong>In a separate CSS file linked in the head of your document</strong>, like so:
+				</p>
+				<pre class="prettyprint lang-html">
+&lt;head&gt;&lt;link href=&#x201d;style.css&#x201d; rel=&#x201d;stylesheet&#x201d; type=&#x201d;text/css&#x201d;&gt;&lt;/head&gt;</pre>
+				<ul>
+					<li>This is the preffered way of adding CSS to your document!</li>
+				</ul>
+			</section>
+
+			<h3>Cascading</h3>
+			<section>
+				<p>CSS styles "cascade" down the DOM.  For example, given the following HTML:</p>
+				<pre class="prettyprint linenums lang-html">
+​&lt;html&gt;
+    &lt;head&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;p&gt;Some text &lt;span&gt;here!&lt;/span&gt;&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​</pre>
+				<p> ...and the following CSS...</p>
+				<pre class="prettyprint linenums lang-css">
+body {
+    font-size: 14px;
+}</pre>
+				<p>The font size rule applied to the body will cascade down the DOM and to the <span class="code">&lt;p&gt;</span> and <span class="code">&lt;span&gt;</span>.  Thus, the <span class="code">&lt;p&gt;</span> and <span class="code">&lt;span&gt</span> will have a font-size of 14px, unless of course, there is a more specific style telling them otherwise.  More on this soon.</p>
+			</section>
+
+			<h3>How are styles applied?</h3>
+			<section>
+				<p>The browser applies styles in a specific order:
+					<ol>
+						<li><strong>Browser Default Styles:</strong> These are the way a browser thinks things should look based on the html tag used.  For example, the browser might decide that all paragraphs should have a 20px bottom margin.  This can be inconsistent from browser to browser though.</li>
+						<li><strong>Page Defined Styles:</strong> Any stylesheets defined by the webpage itself, either in the html, or in a linked css file.</li>
+						<li><strong>User Defined Styles:</strong>Some browsers allow the user to define their own stylesheets from webpages you visit.  These get applied last.</li>
+					</ol>
+				</p>
+
+				<ul class="no_bullet">
+					<li><strong>What about multiple stylesheets linked within the same HTML file?</strong>
+						<p>The file that is farther down in the html source takes precdence?</p>
+					</li>
+					<li><strong>What about within the same stylesheet?</strong>
+						<p>The rule that is farther down in the css file will get applied.  Sensing a pattern here?</p>
+					</li>
+					<li><strong>What if there are two (or more) selectors which match the same element(s)?</strong>
+						<p>The one that is the most specific will get applied, regardless of the order the are defined in.  For example, given the following html:</p>
+						<pre class="prettyprint linenums lang-html">
+​&lt;html&gt;
+    &lt;head&gt;&lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;foo&quot;&gt;Carpe Diem!&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​</pre>
+						<p>...and the following CSS...</p>
+						<pre class="prettyprint lang-css">
+body { color: green; }
+div { color: red; }
+#foo { color: blue; }</pre>
+						<p>The text "Carpe Diem!" will be displayed in blue, because the #foo selector is the most specific out of all three.
+							
+							Selector specificity can get quite complicated, and you can <a href="http://coding.smashingmagazine.com/2007/07/27/css-specificity-things-you-should-know/">read about all the gory details here</a> if you want.  In the majority of cases though, adding an ID to your selector will solve your specificity problems.</p>
+					</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h2>CSS Selectors</h2>
+			<section>
+				<p>Required Reading: <a href="http://net.tutsplus.com/tutorials/html-css-techniques/the-30-css-selectors-you-must-memorize/">The 30 CSS Selectors you Must Memorize.</a></p>
+			</section>
+		</section>
+
+		<section>
+			<h2>Common CSS Properties</h2>
+
+			<h3>Text Properties</h3>
+			<section>
+				<p>See: <a href="http://jsfiddle.net/FFVqm/">http://jsfiddle.net/FFVqm/</a></p>
+			</section>
+
+			<h3>Background Properties</h3>
+			<section>
+				<p>See: <a href="http://jsfiddle.net/ACKA2/">http://jsfiddle.net/ACKA2/</a></p>
+			</section>
+		</section>
+
+		<section>
+			<h2>CSS Box Model</h2>
+
+			<h3>Everything is a box</h3>
+			<section>
+				<p>The main lesson here is that <strong>everything is a rectangular box.  Everything.</strong></p>
+				
+				<p>The box model consists of 4 components:</p>
+				<ul>
+					<li><strong>Content:</strong> Everything inside the actual html tag.  Text or images.</li>
+					<li><strong>Padding:</strong> "Pads" the area between the content and the edge of the box.</li>
+					<li><strong>Border:</strong> A line surrounding the edge of the box, outside the padding, but inside the margin.</li>
+					<li><strong>Margin:</strong> A transparent area outside the box which serves to space it away from other boxes. </li>
+				</ul>
+				<img src="images/w3-box-model.gif" alt="CSS Box Model Diagram">
+			</section>
+
+			<h3>A Warning on Width & Heigh Calculations</h3>
+			<section>
+				<p>A boxes actual width is the sum of it's defined <span class="code">width</span>, <span class="code">padding</span>, and <span class="code">border</span>.  When you set the width property in CSS, what you're really setting is the width of the <strong>content</strong>, not the entire box.</p>
+				<p>See <a href="http://jsfiddle.net/qqFgC/">here</a> for an example of this!</p>
+			</section>
+
+			<h3>Collapsing Margins</h3>
+			<section></section>
+
+		</section>
+
+		<section>
+			<h2>CSS "Inheritance"</h2>
+			<section>
+				<p>The title is a bit misleading.  There's really no true inhertance in CSS.  But that doesn't mean we can't do inheritance-like things.  For example, say we wanted to make a css class called "button" that would apply a bunch of styles to make something look like a button.  The styling for that class might look something like this:</p>
+				<pre class="prettyprint lang-css">
+.button { /* base styles for all buttons */
+    display: inline-block;
+    margin: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 3px; /* css3 */
+    box-shadow: 1px 1px 8px #666; /* css3 */
+    background-color: #f6f6f6; 
+    cursor: pointer; /* makes the cursor a "hand" instead of a "pointer" */
+}</pre>
+				<p>Now we've got a nice gray button.  Hooray!  But what if want to make a green button now, to indicate positive actions?  We might consider making a new class, copying all the styling from the existing buttons, but changing the background color.  But this would be a lot of duplicate code.</p>
+
+				<p>Ideally, we'd be able to specify that the <span class="code">button-good</span> class inhertis all of it's styles from the <span class="code">button</span> class.  Unfortunately, no such structure exists in CSS.  But we can do something that is effectively the same.  For example, here's our new <span class="code">button-green</span> class:</p>
+				<pre class="prettyprint lang-css">
+.button-good { /* a green button */
+    background-color: #66bb66;
+}</pre>
+				<p>Note that all it contains is the background-color rule.  Now, our html might look like this:</p>
+				<pre class="prettyprint lang-css">
+&lt;div class=&quot;button button-good&quot;&gt;Press Me!&lt;/div&gt;</pre>
+				<p>Here we've given the element both the <span class="code">button</span> and <span class="code">button-good</span> classes, so both sets of styles will be applied.  On the <span class="code">background-color</span> property though, we've got two values specified, one from each class.  However, as long as we've defined the styles for <span class="code">button-good</span> <strong>after</strong> the styles for <span class="code">button</span> in the css file, the background-color from <span class="code">button-good</span> will be applied.  The ordering of the class names in the html has no effect.</p>.
+
+				<p>For a more complete example of this technique, see <a href="http://jsfiddle.net/zgHtP/">this</a> link.</p>
+
+			</section>
+
+		</section>
+
+		<section>
+			<h2>CSS Psuedo-Classes</h2>
+			<section>
+				<p>CSS Psuedo-Classes (also sometimes called Psuedo-Selectors) are special selectors that allow you to access elements at specific states, or when they are in special positions.</p>
+
+				<p>The most common of these is the <span class="code">:hover</span> psuedo-selector, which allows you to specify certain styles to be applied only when the user has hovered over an element.  For example, say we're working with the button styles from earlier, but we want the background color and text color of the button to get lighter when we're hovering over it.  We'd specify that in CSS like this: </p>
+				<pre class="prettyprint lang-css">
+.button:hover { /* triggered when you mouse over the element */
+    background-color: #01B3E4;
+    color: #fff;
+}</pre>
+				<p>Psuedo-selectors can also be used to select only elements which are at certain positions in the DOM.  For example, the following css will only target &lt;p&gt;'s that are the first child of their parent:</p>
+				<pre class="prettyprint lang-css">
+p:first-child { /* selects all &lt;p&gt;'s that are the first child of their parent */
+    color: blue;
+}</pre>
+				<p>To read about all the different psuedo-selectors, read <a href="http://css-tricks.com/pseudo-class-selectors/">this</a> article.  To see more psuedo selectors in action, see <a href="http://jsfiddle.net/PsRzx/">this</a> live example.</p>
+			</section>
+		</section>
+
+		<section>
+			<h2>CSS Layout</h2>
+
+			<h3>Block vs Inline</h3>
+			<section>
+				<p>By default, some html elements are "block" and some are "inline".</p>
+
+				<p><strong>Block Elements:</strong>
+					<ul>
+						<li>will always expand to fit the width of their container, but will only expand vertically to accomodate it's content (an empty block element will be full width but have a height of 0.</li>
+						<li>will force a newline before and after</li>
+						<li>Can accept a width, height, margins, padding, and border</li>
+						<li>Examples: <span class="code">&lt;p&gt;</span>, <span class="code">&lt;div&gt;</span>, <span class="code">&lt;li&gt;</span></li>
+					</ul>
+				</p>
+				<p><strong>Inline Elements:</strong>
+					<ul>
+						<li>will wrap tightly around their content both horizontally and vertically</li>
+						<li>flow with text (does not create line breaks)</li>
+						<li>will accept left and right margins (but not top or bottom), and accepts any border or padding</li>
+						<li>will ignore set widths and heights</li>
+						<li>Examples: <span class="code">&lt;a&gt;</span>, <span class="code">&lt;span&gt;</span></li>
+					</ul>
+				</p>
+
+				<p>There are also a few other smaller differences.  See <a href="http://www.impressivewebs.com/difference-block-inline-css/">this</a> link for details.</p>
+
+
+			</section>
+
+			<h3>Z-Index</h3>
+			<section>
+				<p>The z-index is a css property that specifies the stacking order of elements.  In other words, it can control what's "on top".</p>
+				<p>In genreal, an element with a higher z-index will display on top of an element with a lower z-index.  The z-index property can be set to any positive or negative integer.  The default rendering layer is considered to have a z-index of 0.</p>
+				<img src="images/zindex.png" alt="z-index diagram">
+				<p>You likely won't need to use z-index very often, but it's important to know nonetheless.</p>
+				<p>And of course, as with most things CSS, the rules are actually a little bit more complicated.  See <a href="https://developer.mozilla.org/en-US/docs/CSS/Understanding_z-index">this</a> page for more information.</p>
+			</section>
+
+			<h3>The CSS Display Property</h3>
+			<section>
+				<p>The CSS <span class="code">display</span> property describes how an element should be...uhh...displayed.  Common values are:</p>
+				<ul>
+					<li><span class="code">display: block;</span><br>
+						Forces the element to behave like a block element.</li>
+					<li><span class="code">display: inline;</span><br>
+						Forces the element to behave like an inline element</li>
+					<li><span class="code">display: inline-block;</span><br>
+						Firce an element to behave like a block element, but without forcing newlines before and after.</li>
+					<li><span class="code">display: none;</span><br>
+						Forces the elemment to not display at all.  Useful for hiding things programatically.</li>
+				</ul>
+				<p>
+					A quick demo of all of these <span class="code">dispaly</span> properties can be found <a href="http://www.w3schools.com/cssref/playit.asp?filename=playcss_display&preval=block">here</a>, and a full list of accpetable values for <span class="code">display</span> can be found <a href="http://www.w3schools.com/cssref/pr_class_display.asp">here</a>.  However, the above 4 are the one's you'll use 95% of the time.
+				</p>
+
+			</section>
+
+			<h3>The CSS Position Property</h3>
+			<section>
+				<p>The CSS <span class="code">position</span> property describes how an element should be positioned.  Common values are.</p>
+				<ul>
+					<li><span class="code">position: static;</span>
+						<ul>
+							<li>The default value.  Elements are positioned according to the normal flow of the document.</li>
+							<li>Will ignore <span class="code">top</span>, <span class="code">right</span>, <span class="code">bottom</span>, and <span class="code">left</span> CSS properties.</li>
+						</ul>
+					</li>
+					<li><span class="code">position: fixed;</span>
+						<ul>
+							<li>The element is positioned relative to the browser window, and will not move even if the page is scrolled.</li>
+							<li>Effectively pulls the element out of the document--other elemetns will ignore it when positioning themselves.</li>
+							<li>Accepts <span class="code">top</span>, <span class="code">right</span>, <span class="code">bottom</span>, and <span class="code">left</span> properties as offset from the top, right, bottom, and left edges of the browser window.</li>
+						</ul>
+					</li>
+					<li><span class="code">position: relative;</span>
+						<ul>
+							<li>The element is positioned relative to it's normal, static psoition.</li>
+							<li>Accepts <span class="code">top</span>, <span class="code">right</span>, <span class="code">bottom</span>, and <span class="code">left</span> properties as offsets from it's normal position (a relatively positioned element without any of these offsets declared will just display in it's static position.</li>
+						</ul>
+					</li>
+					<li><span class="code">position: absolute;</span>
+						<ul>
+							<li>The element is positioned relative to the first parent element that does not have static positioning.  If none is found, the <span class="code">&lt;html&gtl;</span> element is used.</li>
+							<li>Accepts <span class="code">top</span>, <span class="code">right</span>, <span class="code">bottom</span>, and <span class="code">left</span> properties as offsets from the first parent element without static positioning.</li>
+							<li>Effectively pulls the element out of the document--other elemetns will ignore it when positioning themselves.</li>
+						</ul>
+					</li>
+				</ul>
+				<p>As usual, there are some caveats.  See <a href="http://www.w3schools.com/cssref/pr_class_position.asp">here</a> for a live example, or <a href="http://www.alistapart.com/articles/css-positioning-101/">here</a> for a lengthier explanation.</p>
+			</section>
+
+			<h3>The CSS Float Property</h3>
+			<section>
+				<p>In CSS, the float property allows content to be pushed to the left or right.  A "floated" element is not removed from the flow of the document (text and other inline elements will wrap around it), but also has no height according to it's parent container.  This means that an element which contains exclusively floated elements inside it will have a height of 0.  Thing of floated elements as only being attached to their container at the top edge.</p>
+
+				<p>Floating is one of the most complicated concepts in CSS, and is hard to explain adequately in just a paragraph or two.  I strongly suggest you read <a href="http://css-tricks.com/all-about-floats/">this</a> article (and perhaps <a href="http://coding.smashingmagazine.com/2007/05/01/css-float-theory-things-you-should-know/">this</a> one too) to get the full scoop.</p>
+
+				<p>In the meantime, here are some of the common float values:</p>
+				<ul>
+					<li><span class="code">float: left;</span><br>
+						The element is pushed as far left as it can go, until it's left edge reaches the left edge of it's container, or reaches the right edge of another floated element.
+					</li>
+					<li><span class="code">float: right;</span><br>
+						Same as <span class="code">float: left;</span>, but to the right!
+					</li>
+					<li><span class="code">float: none;</span><br>
+						The element is not floated at all (this is default).
+					</li>
+				</ul>
+			</section>
+
+			<h3>The CSS Clear Property</h3>
+			<section>
+				<p>In simple terms, the CSS clear property allows you to force newlines after floated elements.  This is much easier demonstrated than explained.  For example, say we've got this situation:</p>
+				<img src="images/float_before.png" alt="Without CSS Float">
+				<p>But we want something like this:</p>
+				<img src="images/float_after.png" alt="With CSS Float">
+				<p>This is accomplished with the following simple line of CSS:</p>
+				<pre class="prettyprint lang-css">
+#footer {
+	ckear: both;
+}
+				</pre>
+
+				<p>Coommon values of the <span class="code">float</span> property are:</p>
+				<ul>
+					<li><span class="code">clear: left;</span><br>
+						The element will drop below any element that is floated left.d
+					</li>
+					<li><span class="code">clear: right;</span><br>
+						The element will drop below element that is floated right;
+					</li>
+					<li><span class="code">clear: both;</span><br>
+						The element will drop below any floated element.
+					</li>
+				</ul>
+			</section>
+
+			<h3>Layout Engines</h3>
+			<section>
+				The layout engine in your browser is responsible for computing the positioning of everything on a webpage.  Different browsers use different layout engines, which is the main reason that we there inconsistencies between them.  Here are a few popular layout engines:
+				<ul>
+					<li><strong>Webkit:</strong> Open source.  Used in Google Chrome, Safari, and lots of other smaller browsers.  Has the largest market share of any layout engine right now.  Also, has a <a href="http://en.wikipedia.org/wiki/Webkit">long and interesting history</a>.</li>
+					<li><strong>Gecko:</strong> Open source.  Used primarily in Firefox.</li>
+					<li><strong>Trident:</strong> Used in Internet Explorer.  Underwent major improvments for the release of Internet Explorer 9.</li>
+					<li><strong>Presto:</strong> Used in Opera.</li>
+				</ul>
+			</section>
+
+			<h3>CSS Resets</h3>
+			<section>
+				<p>Because of the inconsistencies in the layout engines, it's often useful to use a CSS Reset in your projects.  A CSS Reset is simply a stylesheet which resets margins, paddings, and other properties back to 0 for every html element.  This way, any styles you apply in your own stylesheet after the CSS Reset will have the same "starting point", regardless of the browser defaults.</p>
+
+				<p><a href="http://meyerweb.com/eric/tools/css/reset/">Eric Meyer's CSS Reset</a> is one of the most popular.</p>
+			</section>
+
+			<h3>Fixed Layout vs Fluid/Liquid Layout</h3>
+			<section>
+				<p>Fixed and Fluid are the two most popular layout patterns for modern websites.</p>
+
+				<strong>Fixed Layouts:</strong>
+				<ul>
+					<li>Have an outer conatiner with a defined width.</li>
+					<li>The layout is always the same size regardless of the size of the browser window, unless specifically programmed otherwise.</li>
+					<li>Gives a web developer more control because they know that the computed width of various elements will stay the same.</li>
+					<li>Easier to code.</li>
+				</ul>
+
+				<strong>Fluid/Liquid Layouts:</strong>
+				<ul>
+					<li>Have an outer container with a width of 100%, forcing it to fill the entire browser window, regardless of how big or small that may be.</li>
+					<li>Have subsections within the otuer container with widths that are usually defined with percentages rather than pxiels so that they are always the same proprotion regardless of the window size.</li>
+					<li>Uses space more efficiently because it always use all the available space in the browser window.</li>
+					<li>Harder to code, and harder to design for.</li>
+				</ul>
+				<br>
+
+				<p>
+					<strong>Which layout type should I use?</strong><br>
+					Up to you!  Fixed layouts are not considered "bad" by any means.  Often the layout you choose depends on what kind of site or application you're buidling.
+				</p>
+
+			</section>
+
+			<h3>Vertical Positioning in CSS</h3>
+			<section>
+				<p>CSS does not play nicely with pretty much anything to do with vertical positioning and sizing.  Vertical centering, for example, can be difficult without javascript.  The <a href="http://matthewjamestaylor.com/blog/equal-height-columns-cross-browser-css-no-hacks ">CSS Equal Height Column problem</a> is an even more difficult example.  We'll see more about this in the optional CSS lab.</p>
+			</section>
+
+			<h3>CSS Grid Systems</h3>
+			<section>
+				<p>
+					CSS Grid Systems are css libaries which provice you with a bunch of default styles for working with a grid-based layout.  Note that the word "grid" here means nothing in CSS.  There is no grid preoprty.  Rather, "grid" here just refers to the design pattern of laying things out in a grid-like fashion.
+				</p>
+				<p>
+					Often, grid systems be split into 12 or 16 columns.  Then, you'll be able to specify how wide you want something to be within the grid by using special classes.  For example, in a 12 column grid, you might use the class "span_4", "4 columns", or something similar to specify that you want an element that is a third the width of the grid.  When in doubt, refer to the documentation of the grid system itself.
+				</p>
+
+				<img src="images/960gs.png" alt="960.gs's 12-column layout">
+
+				<p>Some popular grid systems are:</p>
+				<ul>
+					<li><a href="http://960.gs/"><strong>960.gs</strong></a> - Available in either 12 or 16 columns, which fit inside a 960px wide container.</li>
+					<li><a href="http://www.getskeleton.com/"><strong>Skeleton</strong></a> - A responsive grid system (among other things) which uses CSS3 media queries to change the grid system on the fly for devices with smaller screens.</li>
+				</ul>
+				<p>Beware of extra included boilerplate code!  If you don't need it, don't include it on your page.</p>
+
+			</section>
+		</section>
+
+		<section>
+			<h2>Using Images in CSS</h2>
+
+            <section>
+            	<p>Bandwidth matters, especially on mobile.  That's why it's important to choose the correct image type when working on the web.  First, some terms relating to image compression:</p>
+
+            <ul>
+            	<li><strong>Lossy:</strong> An image compression algorithm is considered lossy if it throws away data from the image in the process of compressing it.  For example, it might decide to reduce the number of unique colors in an image in an effort to make it smaller.</li>
+            	<li><strong>Lossless:</strong> An image compressional algorithm is considered lossless if it effectively ccontains the same information as it's uncompressed counterpart, without throwing anything away.</li>
+            </ul>
+
+            </section>
+
+            <h3>Image Types</h3>
+            <section>
+            	<ul>
+            		<li><strong>JPEG:</strong>A lossy format good for photographs or large images where quality isn't an issue.</li>
+            		<li><strong>PNG:</strong>A lossless format which supports full alpha transparency (meaning a pixel can be anywhere from 0 to 100% transparent).</li>
+            		<li><strong>GIF:</strong>A lossless format that is good for images with few colors.  It does transparency, but only in the binary sense--a pixel is either transparent or it isn't, no in between.</li>
+            	</ul>
+            	<p>JPEGs and PNGs are used most often in web design.  These days, most people only use GIFs for images that need animation.  For more details, see <a href="http://webdesign.tutsplus.com/articles/general/image-types-and-usage-in-web-design/">this</a> article. </p>
+            </section>
+
+            <h3>Sprite Sheets</h3>
+            <section>
+            	<p>Each image you load is another HTTP request.  Only so many HTTP requests can run in parallel for any given domain.  Because of this, our page will load faster if we can minimize the number of HTTP requests we're making.  One common way to do this is to use <strong>sprite sheets</strong> instead of individual images.</p>
+
+            	<p>Sprite sheets work by combining related images into one, like so: </p>
+            	<img src="images/spritesheets.png" alt="Sprite Sheet Examples">
+            	<p>Then, you can use the <span class="code">background-position</span> property in CSS to pull out only the part of the image you want.</p>
+
+            	<p>One common use of this is for changing a background image on hover.  The non hover image will load as soon as the page is loaded.  However the hover image won't load until it absolutely has to, so there will be a slight delay when the user attempts to hover over the item for the first time.  To solve this, we can combine both the non-hover and hover images in the same file, so they load together.  Then, on hover, instead of changing the <span class="code">background-image</span>, we simply shift the <span class="code">background-position</span> up.</p>
+
+            	<p>See <a href="http://css-tricks.com/css-sprites/">here</a> for more information.</p>
+            </section>
+			
+		</section>
+
+
+
+		<footer>
+			<span>CSS</span>15-237: Building Cross-Platform Mobile Web Apps
+		</footer>
+	</body>
+</html>
